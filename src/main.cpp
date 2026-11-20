@@ -2,34 +2,33 @@
 #include <Arduino.h>
 #include <U8g2lib.h>
 
-
-
 #include "Spaceship.h"
 #include "Input.h"
-
-
+#include "UFO.h"
 
 void setup()
 {
   initDisplay();
   initInputPins();
+  Serial.begin(9600);
 }
-int number = 0;
 
 int gameStarted = false;
-
+unsigned long previousMillis = 0;
+const unsigned long interval = 2000;
 
 void renderGame()
 {
   display.firstPage();
   do
   {
-    drawSpaceshipInGame(61, 56, 9, 8);
+    drawUFOs();
+    drawSpaceshipInGame(9, 8);
   } while (display.nextPage());
 
   delay(30);
 }
-
+bool fired = false;
 void loop()
 {
   if (!gameStarted)
@@ -48,18 +47,36 @@ void loop()
     return;
 
   renderGame();
+  unsigned long currentMillis = millis();
+
+  if (currentMillis - previousMillis >= interval)
+  {
+    previousMillis = currentMillis;
+    spawnUFO();
+  }
+  moveUFOs();
   Coordinate spaceshipPos = getSpaceshipPosition();
+
   if (leftButton == HIGH && spaceshipPos.x > 0)
   {
+    Serial.println("Left button pressed");
     updateSpaceshipPosition(-1, 0);
   }
   if (rightButton == HIGH && spaceshipPos.x < 119)
   {
+    Serial.println("Right button pressed");
     updateSpaceshipPosition(1, 0);
   }
-  
-  if(startButton == HIGH)
+
+  if (startButton == HIGH && !fired)
   {
-    fireBullet(spaceshipPos.x + 3, spaceshipPos.y);
+    fired = true;
+    // fireBullet(spaceshipPos.x + 3, spaceshipPos.y);
+    Serial.println("Start button pressed");
+    updateSegmentDisplay(1);
+  }
+  else if (startButton == LOW)
+  {
+    fired = false;
   }
 }

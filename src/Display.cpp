@@ -5,7 +5,7 @@ U8G2_SH1106_128X64_NONAME_1_HW_I2C display(
 
 TM1637Display segmentDisplay(CLK, DIO);
 
-
+int number = 0;
 void initDisplay()
 {
     display.begin();
@@ -18,7 +18,8 @@ void clearDisplay()
     display.clearDisplay();
     segmentDisplay.clear();
 }
-void updateSegmentDisplay(int number)
+void updateSegmentDisplay(int delta)
 {
+    number += delta;
     segmentDisplay.showNumberDec(number, true);
 }

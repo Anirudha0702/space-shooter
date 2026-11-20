@@ -124,8 +124,10 @@ void renderStartAnimation()
   delay(30);
 }
 
-void drawSpaceshipInGame(int x, int y, int width, int height)
+void drawSpaceshipInGame( int width, int height)
 {
+    int x=spaceshipX;
+    int y=spaceshipY;
   if (width <= 0 || height <= 0)
     return;
 

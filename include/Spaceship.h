@@ -6,7 +6,7 @@ void drawStars();
 void updateStars();
 void drawSpaceship();
 void renderStartAnimation();
-void drawSpaceshipInGame(int x, int y, int width, int height);
+void drawSpaceshipInGame( int width, int height);
 
 Coordinate getSpaceshipPosition();
 void updateSpaceshipPosition(int deltaX, int deltaY);
